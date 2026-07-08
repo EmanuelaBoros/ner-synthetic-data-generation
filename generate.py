@@ -11,6 +11,7 @@ from typing import Any
 
 from vllm import LLM, SamplingParams
 
+
 def upload_to_hub(repo_id, files, private=False):
     api = HfApi()
 
@@ -32,6 +33,7 @@ def upload_to_hub(repo_id, files, private=False):
             )
 
     print(f"Uploaded files to https://huggingface.co/datasets/{repo_id}")
+
 
 # ---------------------------------------------------------------------
 # Tokenization and span extraction
@@ -595,7 +597,7 @@ def main() -> None:
 
     print(f"\nSaved GLiNER JSONL to: {args.output_jsonl}")
     print(f"Saved GLiNER JSON to: {args.output_json}")
-    print(f"Saved raw generations to: {args.raw_output_json}"
+    print(f"Saved raw generations to: {args.raw_output_json}")
 
     if args.push_to_hub:
         upload_to_hub(
