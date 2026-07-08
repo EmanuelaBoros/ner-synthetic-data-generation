@@ -8,10 +8,6 @@ Generated dataset:
 
 [emanuelaboros/synthetic-historical-ner-data](https://huggingface.co/datasets/emanuelaboros/synthetic-historical-ner-data)
 
-Code repository:
-
-[github.com/EmanuelaBoros/ner-synthetic-data-generation](https://github.com/EmanuelaBoros/ner-synthetic-data-generation)
-
 ---
 
 ## Overview
