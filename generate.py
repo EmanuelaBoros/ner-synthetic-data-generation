@@ -1,5 +1,6 @@
 from __future__ import annotations
-
+from huggingface_hub import HfApi
+from pathlib import Path
 import argparse
 import json
 import random
@@ -9,6 +10,28 @@ from pathlib import Path
 from typing import Any
 
 from vllm import LLM, SamplingParams
+
+def upload_to_hub(repo_id, files, private=False):
+    api = HfApi()
+
+    api.create_repo(
+        repo_id=repo_id,
+        repo_type="dataset",
+        private=private,
+        exist_ok=True,
+    )
+
+    for file_path in files:
+        file_path = Path(file_path)
+        if file_path.exists():
+            api.upload_file(
+                path_or_fileobj=str(file_path),
+                path_in_repo=file_path.name,
+                repo_id=repo_id,
+                repo_type="dataset",
+            )
+
+    print(f"Uploaded files to https://huggingface.co/datasets/{repo_id}")
 
 # ---------------------------------------------------------------------
 # Tokenization and span extraction
@@ -506,6 +529,38 @@ def main() -> None:
         help="Top-k sampling.",
     )
 
+    parser.add_argument(
+        "--push-to-hub",
+        action="store_true",
+        help="Upload generated dataset to Hugging Face Hub.",
+    )
+
+    parser.add_argument(
+        "--hub-dataset-id",
+        default="emanuelaboros/synthetic-historical-ner-data",
+        help="Hugging Face dataset repository ID.",
+    )
+
+    parser.add_argument(
+        "--private",
+        action="store_true",
+        help="Create/upload as a private dataset.",
+    )
+
+    parser.add_argument(
+        "--output-jsonl",
+        default="outputs/synthetic_historical_ner_gliner.jsonl",
+    )
+
+    parser.add_argument(
+        "--output-json",
+        default="outputs/synthetic_historical_ner_gliner.json",
+    )
+
+    parser.add_argument(
+        "--raw-output-json",
+        default="outputs/synthetic_historical_ner_raw.json",
+    )
     args = parser.parse_args()
 
     print("Loading model...")
@@ -540,7 +595,18 @@ def main() -> None:
 
     print(f"\nSaved GLiNER JSONL to: {args.output_jsonl}")
     print(f"Saved GLiNER JSON to: {args.output_json}")
-    print(f"Saved raw generations to: {args.raw_output_json}")
+    print(f"Saved raw generations to: {args.raw_output_json}"
+
+    if args.push_to_hub:
+        upload_to_hub(
+            repo_id=args.hub_dataset_id,
+            files=[
+                args.output_jsonl,
+                args.output_json,
+                args.raw_output_json,
+            ],
+            private=args.private,
+        )
 
 
 if __name__ == "__main__":
