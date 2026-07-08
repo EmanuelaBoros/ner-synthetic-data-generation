@@ -4,10 +4,6 @@ Synthetic data generation pipeline for creating **historical newspaper-style nam
 
 The repository generates short historical passages with entity annotations inspired by HIPE/Impresso-style historical NER guidelines, then converts them into token-span format usable by GLiNER.
 
-Generated dataset:
-
-[emanuelaboros/synthetic-historical-ner-data](https://huggingface.co/datasets/emanuelaboros/synthetic-historical-ner-data)
-
 ---
 
 ## Overview
@@ -117,50 +113,6 @@ This uploads the generated files to:
 ```text
 https://huggingface.co/datasets/emanuelaboros/synthetic-historical-ner-data
 ```
-
----
-
-## Suggested workflow
-
-1. Generate a small sample, for example 5 to 20 examples.
-2. Manually inspect the raw generations and converted GLiNER spans.
-3. Check that all entity strings appear in the generated text.
-4. Verify that labels remain within the controlled schema.
-5. Generate a larger dataset.
-6. Use the synthetic data for GLiNER fine-tuning or data augmentation.
-7. Evaluate on real manually annotated historical NER data.
-
----
-
-## Quality control
-
-Synthetic NER data can be useful, but it should be inspected carefully. Common issues include:
-
-- missing entity mentions;
-- entity strings that do not exactly match the text;
-- wrong entity types;
-- overly modern language;
-- unrealistic historical contexts;
-- inconsistent OCR-like noise;
-- duplicated examples.
-
-The script includes post-processing to keep only valid examples where entity spans can be matched in the tokenized text.
-
----
-
-## Limitations
-
-This dataset is fully synthetic. It is not a gold-standard benchmark and should not be used as the only evaluation source for historical NER systems.
-
-The generated data is most useful for:
-
-- warm-starting NER models;
-- testing GLiNER fine-tuning pipelines;
-- comparing prompts;
-- augmenting low-resource historical NER settings;
-- prototyping before training on curated data.
-
-For serious evaluation, models should be tested on manually annotated corpora.
 
 ---
 
