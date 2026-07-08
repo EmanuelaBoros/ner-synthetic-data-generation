@@ -74,52 +74,6 @@ Token indices are inclusive.
 
 ---
 
-## Repository structure
-
-```text
-ner-synthetic-data-generation/
-├── generate.py
-├── requirements.txt
-├── README.md
-└── LICENSE
-```
-
-Expected output files:
-
-```text
-outputs/
-├── synthetic_historical_ner_gliner.jsonl
-├── synthetic_historical_ner_gliner.json
-└── synthetic_historical_ner_raw.json
-```
-
----
-
-## Installation
-
-Clone the repository:
-
-```bash
-git clone https://github.com/EmanuelaBoros/ner-synthetic-data-generation.git
-cd ner-synthetic-data-generation
-```
-
-Install dependencies:
-
-```bash
-pip install -U pip
-pip install -r requirements.txt
-```
-
-Minimal requirements:
-
-```txt
-vllm
-huggingface_hub
-```
-
----
-
 ## Generate a small test dataset
 
 Run a small local test first:
