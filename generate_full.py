@@ -12,7 +12,6 @@ from typing import Any
 from huggingface_hub import HfApi
 from vllm import LLM, SamplingParams
 
-
 COLUMNS = [
     "TOKEN",
     "NE-COARSE-LIT",
@@ -110,6 +109,7 @@ YEARS = list(range(1798, 1951))
 # ---------------------------------------------------------------------
 # Prompt
 # ---------------------------------------------------------------------
+
 
 def create_hipe_tsv_prompt(
     *,
@@ -301,6 +301,7 @@ Return JSON in this form:
 # Parsing and validation
 # ---------------------------------------------------------------------
 
+
 def extract_json_object(text: str) -> dict[str, Any] | None:
     text = text.strip().replace("<end>", "").strip()
     start = text.find("{")
@@ -422,7 +423,9 @@ def validate_row(row: dict[str, Any]) -> dict[str, str] | None:
     return out
 
 
-def validate_record(record: dict[str, Any], fallback_metadata: dict[str, str]) -> dict[str, Any] | None:
+def validate_record(
+    record: dict[str, Any], fallback_metadata: dict[str, str]
+) -> dict[str, Any] | None:
     if not isinstance(record, dict):
         return None
 
@@ -456,6 +459,7 @@ def validate_record(record: dict[str, Any], fallback_metadata: dict[str, str]) -
 # ---------------------------------------------------------------------
 # Serialization
 # ---------------------------------------------------------------------
+
 
 def record_to_tsv(record: dict[str, Any]) -> str:
     lines = []
@@ -492,7 +496,9 @@ def save_jsonl(records: list[dict[str, Any]], path: str | Path) -> None:
 
 def upload_to_hub(repo_id: str, files: list[str | Path], private: bool = False) -> None:
     api = HfApi()
-    api.create_repo(repo_id=repo_id, repo_type="dataset", private=private, exist_ok=True)
+    api.create_repo(
+        repo_id=repo_id, repo_type="dataset", private=private, exist_ok=True
+    )
 
     for file_path in files:
         file_path = Path(file_path)
@@ -510,6 +516,7 @@ def upload_to_hub(repo_id: str, files: list[str | Path], private: bool = False) 
 # ---------------------------------------------------------------------
 # Generation
 # ---------------------------------------------------------------------
+
 
 def build_jobs(num_samples: int, seed: int) -> list[dict[str, Any]]:
     random.seed(seed)
@@ -621,6 +628,7 @@ def print_stats(records: list[dict[str, Any]], failed_count: int) -> None:
 # Main
 # ---------------------------------------------------------------------
 
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         description="Generate synthetic HIPE-style full-column TSV NER/NEL data."
@@ -634,11 +642,17 @@ def main() -> None:
     parser.add_argument("--top-k", type=int, default=50)
     parser.add_argument("--max-tokens", type=int, default=1800)
     parser.add_argument("--seed", type=int, default=13)
-    parser.add_argument("--output-tsv", default="outputs/synthetic_historical_ner_hipe_full.tsv")
-    parser.add_argument("--output-jsonl", default="outputs/synthetic_historical_ner_hipe_full.jsonl")
+    parser.add_argument(
+        "--output-tsv", default="outputs/synthetic_historical_ner_hipe_full.tsv"
+    )
+    parser.add_argument(
+        "--output-jsonl", default="outputs/synthetic_historical_ner_hipe_full.jsonl"
+    )
     parser.add_argument("--failed-output", default="outputs/failed_generations.jsonl")
     parser.add_argument("--push-to-hub", action="store_true")
-    parser.add_argument("--hub-dataset-id", default="emanuelaboros/synthetic-historical-ner-data")
+    parser.add_argument(
+        "--hub-dataset-id", default="emanuelaboros/synthetic-historical-ner-data"
+    )
     parser.add_argument("--private", action="store_true")
     args = parser.parse_args()
 
